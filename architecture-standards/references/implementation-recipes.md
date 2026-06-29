@@ -2,6 +2,12 @@
 
 Use these when building code with architecture standards. They are not templates to copy blindly; they are decision recipes for common implementation shapes.
 
+## Contents
+
+- features, material journeys, validation, and shared presentation
+- APIs/actions, middleware/guards, and persistence
+- background work, caches/read models, and third-party integrations
+
 ## Add A New Feature
 
 1. Identify the capability that owns the behavior.
@@ -16,6 +22,27 @@ Avoid:
 - adding business rules to the first component or route touched
 - creating a generic helper before there is a real variation point
 - bypassing existing application/store/service flows for speed
+
+## Add Or Change A Material User/System Journey
+
+Use this recipe when a journey is performance-sensitive, crosses several layers, performs multiple reads/writes, or has meaningful failure consequences. Apply only the steps relevant to the codebase and use case.
+
+1. Trace the complete journey across delivery, application, domain, data, infrastructure, and external dependencies.
+2. Define the correctness contract first: authority, transaction/consistency needs, conflict behavior, ordering, freshness, partial failure, and user-visible completion.
+3. Establish proportional budgets for client/internal round trips, latency, payload, query/fan-out work, concurrency, memory, and cost.
+4. Shape a capability command/query when it reduces caller knowledge, chatty CRUD, or split transactions without hiding unbounded server work.
+5. Remove waterfalls and N+1 work; consider projections, batching, bounded parallelism, and deterministic pagination where they materially help.
+6. Move work async only when its delivery, idempotency, status, retry, and recovery semantics are acceptable.
+7. Add caches or read models only when the read pattern justifies their ownership, freshness, invalidation/rebuild, reconciliation, and operational cost.
+8. Instrument the critical boundaries and verify the resulting journey rather than assuming fewer endpoints means better performance.
+
+Avoid:
+
+- optimizing one layer while making the complete journey slower or less reliable
+- replacing chatty client calls with one endpoint that performs unbounded work
+- making independent work sequential without a correctness reason
+- parallelizing dependent or consistency-sensitive work
+- adding queues, caches, or read models without a measured or credible need
 
 ## Add Or Change Validation
 
@@ -48,25 +75,52 @@ Avoid:
 ## Add Or Change An API/Route/Action
 
 1. Define the command/query contract explicitly.
-2. Keep transport parsing and response mapping at the edge.
-3. Delegate business rules and state transitions inward.
-4. Check direct/bypass callers: jobs, scripts, store actions, webhooks, imports, tests.
-5. Decide idempotency and retry behavior for unsafe operations.
-6. Add contract/error tests for invalid input and compatibility-sensitive paths.
+2. Compose the edge pipeline visibly: request identity, authentication context, risk-tiered rate limit, transport validation, capability use case, and response/error mapping as applicable.
+3. Keep transport parsing and response mapping at the edge.
+4. Delegate business rules and state transitions inward.
+5. Use a consistent success, error, and pagination contract across the public boundary.
+6. Shape commands and queries around complete capability journeys when several CRUD calls form one workflow.
+7. Keep list queries bounded with explicit pagination and maximum limits.
+8. Decide which cross-cutting concerns belong in middleware/guards and which capability concerns belong in the application use case.
+9. Check direct/bypass callers: jobs, scripts, store actions, webhooks, imports, tests.
+10. Decide idempotency and retry behavior for unsafe operations.
+11. Add contract/error tests for invalid input and compatibility-sensitive paths.
 
 Avoid:
 
 - accepting client-controlled authoritative fields
 - exposing persistence models directly
 - letting route handlers become the only place business rules exist
+- putting capability-specific authorization or workflow policy in global middleware
+- wrapping every route in generic machinery that obscures its contract and use case
+
+## Add Or Change Middleware Or A Guard
+
+1. Confirm the concern truly applies broadly before placing it in middleware.
+2. Keep middleware deterministic, bounded, and cheap.
+3. Attach request context or reject/redirect at the edge; delegate capability decisions inward.
+4. Measure repeated external or datastore work performed on every request.
+5. Test ordering, bypass paths, public routes, failure semantics, and sensitive logging.
+
+Middleware and guard concerns include:
+
+- request/correlation identity
+- coarse authentication/session establishment
+- security headers, CORS, locale, and rate limits
+- transport-shape validation at a scoped route boundary
+
+Keep resource ownership, durable business rules, multi-step workflows, and feature-specific response shaping in their owning application, domain, or presentation boundary.
 
 ## Add Or Change Persistence
 
 1. Name the source of truth and ownership boundary.
 2. Add schema constraints/indexes for true invariants where the datastore can enforce them.
-3. Keep migrations/backfills idempotent when possible.
-4. Check read model, cache, search, and projection consistency.
-5. Define retention, deletion, and recovery semantics if data lifecycle changes.
+3. Shape reads for the owning capability journey rather than exposing generic datastore access to callers.
+4. Choose transaction scope, isolation/conflict handling, and ordering from the consistency needs of the use case.
+5. Parallelize independent reads when it reduces latency and preserves understandable failure semantics.
+6. Keep migrations/backfills idempotent when possible.
+7. Check read model, cache, search, and projection consistency.
+8. Define retention, deletion, and recovery semantics if data lifecycle changes.
 
 Avoid:
 

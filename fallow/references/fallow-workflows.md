@@ -37,6 +37,7 @@ Health:
 ```bash
 npx fallow health --format json --quiet --explain
 npx fallow health --hotspots --file-scores --format json --quiet --explain
+npx fallow health --runtime-coverage ./coverage --format json --quiet --explain
 ```
 
 Auto-fix:
@@ -122,7 +123,7 @@ Later rerun:
 2. If docs are missing but config or tool setup exists, treat the run as configured-without-history and rebuild the current-state record instead of reinitializing blindly.
 3. Run the baseline signal set again under the current policy.
 4. Classify findings as new regression, still-open accepted debt, resolved, stale exception, or policy drift.
-5. Revisit optional branches only if repo evidence changed: new packages, new public API surface, new dynamic loader, new CI need, or new architecture boundary.
+5. Revisit optional branches only if repo evidence changed: new packages, new public API surface, new dynamic loader, new coverage artifact, new CI need, or new architecture boundary.
 6. Compare counts and top findings against the previous recorded run when available. If raw JSON is too large, preserve summaries that are sufficient to explain deltas.
 7. Update `.audits/fallow.md` newest turn first.
 
@@ -179,19 +180,19 @@ When fixing Fallow findings, use a governed remediation loop:
 
 Do not apply `fallow fix --yes` as a blind cleanup. Use `fix --dry-run` first, review the proposed removals/edits against architecture and public API intent, then apply only the safe subset or ask for confirmation when scope is ambiguous.
 
-## Licensed Runtime Intelligence Is Out Of Scope
+## Optional Runtime Intelligence
 
-This skill is free-version-only. Do not run `fallow license activate`, do not start a trial, and do not configure licensed runtime intelligence or runtime-coverage setup.
+Use runtime intelligence only when the user wants execution evidence or the repo can produce coverage that represents real usage. Do not activate a trial or configure coverage as a default adoption step.
 
-If a user asks for licensed Fallow behavior, state that it is outside this skill's allowed scope and continue with free static-analysis commands where possible:
+Commands:
 
 ```bash
-npx fallow --format json --quiet --explain
-npx fallow dead-code --format json --quiet --explain
-npx fallow dupes --format json --quiet --explain
-npx fallow health --format json --quiet --explain
-npx fallow fix --dry-run --yes --format json --quiet
+npx fallow license activate --trial --email you@company.com
+npx fallow coverage setup
+npx fallow health --runtime-coverage ./coverage --format json
 ```
+
+Before setup, identify the coverage source, whether it is test-only or production-like, and which packages/apps it represents. In reports, distinguish static dead-code candidates from code that is unexecuted in the provided runtime evidence.
 
 ## CI and Baselines
 
@@ -236,7 +237,7 @@ When documenting a Fallow assessment in `.audits/fallow.md`, include:
 - inferred run state and the evidence for it
 - Fallow version when available
 - config state: none, generated, modified, existing, or needs review
-- optional branches considered: CI, baselines, boundaries, MCP/agent setup, and skipped licensed/runtime features
+- optional branches considered: runtime, CI, baselines, boundaries, MCP/agent setup
 - category counts for dead code, duplication, health, audit, and fix preview
 - top findings by risk, not just count
 - high-confidence cleanup items

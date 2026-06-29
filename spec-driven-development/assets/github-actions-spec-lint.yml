@@ -1,0 +1,76 @@
+name: Spec Validation
+
+on:
+  pull_request:
+    paths:
+      - ".spec/**"
+      - ".github/CODEOWNERS"
+
+jobs:
+  validate-specs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch base branch
+        env:
+          BASE_REF: ${{ github.base_ref || 'main' }}
+        run: git fetch origin "${BASE_REF}" --depth=1
+
+      - name: Find changed spec directories
+        id: changed-specs
+        env:
+          BASE_REF: ${{ github.base_ref || 'main' }}
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          import subprocess
+
+          base_ref = os.environ.get("BASE_REF", "main")
+          base = f"origin/{base_ref}"
+          changed = subprocess.check_output(
+              ["git", "diff", "--name-only", f"{base}...HEAD"], text=True
+          ).splitlines()
+          spec_dirs = sorted(
+              {
+                  str(path.parent)
+                  for raw in changed
+                  if ".spec/" in raw
+                  for path in [Path(raw)]
+                  if path.name in {"design.md", "requirements.md", "tasks.md"}
+              }
+          )
+          print("\n".join(spec_dirs))
+          Path("changed-specs.txt").write_text("\n".join(spec_dirs))
+          PY
+
+      - name: Validate changed specs
+        env:
+          BASE_REF: ${{ github.base_ref || 'main' }}
+        run: |
+          while IFS= read -r spec_dir; do
+            [ -z "$spec_dir" ] && continue
+            python3 .spec/_shared/spec-tools/scripts/lint_spec.py --spec-dir "$spec_dir"
+            python3 .spec/_shared/spec-tools/scripts/check_code_refs.py --spec-dir "$spec_dir" --min-path-refs 8
+            python3 .spec/_shared/spec-tools/scripts/traceability_report.py --spec-dir "$spec_dir" --strict
+            python3 .spec/_shared/spec-tools/scripts/spec_summary.py --spec-dir "$spec_dir" --write
+            python3 .spec/_shared/spec-tools/scripts/spec_summary.py --spec-dir "$spec_dir" --format pr-comment --write
+            python3 .spec/_shared/spec-tools/scripts/spec_drift_check.py --spec-dir "$spec_dir" --diff-base "origin/${BASE_REF}"
+          done < changed-specs.txt
+
+      - name: Publish spec review snapshots
+        if: always()
+        run: |
+          while IFS= read -r spec_dir; do
+            [ -z "$spec_dir" ] && continue
+            comment_path="$spec_dir/pr-comment.md"
+            [ -f "$comment_path" ] && cat "$comment_path" >> "$GITHUB_STEP_SUMMARY"
+            [ -f "$comment_path" ] && printf "\n\n" >> "$GITHUB_STEP_SUMMARY"
+          done < changed-specs.txt

@@ -1,14 +1,18 @@
-# Diff Review
+# Diff Review Skill
 
-Reviews local git diffs before they reach origin, with emphasis on bugs, security issues, regressions, and code quality risks.
+Reviews local git diffs before pushing, with emphasis on production risk rather than style feedback.
 
-Use this skill when you want a code-review pass on local changes, staged files, a branch diff, or a re-review after fixes.
+## Includes
 
-Works well with `architecture-standards` when you want stronger architectural reasoning behind findings and remediation options.
+- `SKILL.md`: operating router for diff review, re-review, external finding triage, optional remediation planning, and all-clear gates.
+- `agents/openai.yaml`: agent configuration.
+- `scripts/review-preflight.sh`: collects branch, PR, changed-file, history, hotspot, and verification context.
+- `references/`: workflow, gates, finding format, remediation-planning handoff, PR automation, deep dual-pass review, maintainability rubric, static-analysis guidance, stack references, escaped-finding learning, and calibration material.
 
-## Folder Contents
+## Use When
 
-- `SKILL.md` contains the full skill instructions and trigger rules.
-- `agents/openai.yaml` defines the agent configuration for the skill.
-- `references/` contains stack-specific review guidance plus calibration, severity, review-process, external-finding, and static-analysis references used during investigation.
-- `scripts/review-preflight.sh` collects branch and review context before a medium/high-risk review.
+- Reviewing working-tree, staged, branch, or PR changes.
+- Re-reviewing after fixes.
+- Triage external GitHub, CI, bot, or user findings.
+- Running deep, harsh, or branch-total review before a push.
+- Turning selected live review findings into executor-ready remediation plans.

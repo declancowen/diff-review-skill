@@ -25,6 +25,22 @@ Score each area:
 - cycles are absent or contained
 - static/import checks or architecture tests protect important boundaries when drift has happened before
 
+### Separation Of Concerns
+
+- presentation depends on capability-level commands/queries rather than datastore mechanics
+- application use cases own orchestration, authorization, transaction boundaries, and side-effect coordination
+- durable business policy is not trapped in controllers, hooks, ORM queries, or vendor adapters
+- data and infrastructure concerns have explicit owners and do not leak outward
+- clean external APIs do not hide god controllers, services, hooks, or database functions
+
+### Cross-Layer Semantics
+
+- meaningful boundaries use deliberate commands, queries, results, events, and error semantics
+- transport, application, domain, persistence, and vendor shapes are mapped where their meanings differ without ceremonial duplication
+- required identity/tenant, correlation, deadline/cancellation, and idempotency context reaches the correct owner
+- transaction, consistency, conflict, ordering, freshness, side-effect timing, and partial-failure behavior are explicit where relevant
+- important work is not hidden behind implicit queries, silent retries, global mutable context, or swallowed failures
+
 ### Data Ownership
 
 - each data model has a clear owner
@@ -77,6 +93,33 @@ Score each area:
 - duplication, complexity, churn, and module-size signals do not contradict the score
 - target-state plans include transition slices and containment gates
 - accepted baselines, suppressions, and allowlists have owners and revisit triggers
+
+### Simplicity And Proportionality
+
+- the system uses the fewest concepts needed for current requirements and risks
+- abstractions, layers, dependencies, and runtime mechanisms solve named present-day problems
+- speculative scaffolding, forwarding wrappers, and unused extension points are absent
+- maintainers can trace primary journeys without unnecessary indirection
+- complexity added by recent work is balanced by removed paths, reduced risk, or clear operational value
+
+### Journey Efficiency
+
+- user journeys use bounded client round trips and payloads
+- capability-level commands and queries own multi-step or atomic workflows
+- clients do not orchestrate durable business rules through chatty CRUD chains
+- server/database work is measured separately from API request count
+- caches, optimistic state, and invalidation do not create excessive reconciliation work
+- material paths bound query/fan-out work, concurrency, memory, retries, and queue/job work
+- performance mechanisms are selected proportionately and retain clear source-of-truth, failure, and operational ownership
+
+### Cost Efficiency
+
+- material costs are attributable to useful outcomes, capabilities, environments, and owners
+- normal, idle, peak, failure/recovery, and data-growth amplification are understood
+- calls/work, fan-out, retries, retained/derived data, transfer, and third-party usage are bounded where needed
+- architecture options are compared by total cost of ownership rather than technology preference
+- costly paths have proportionate evidence, budgets/alerts, and regression guardrails
+- cost optimization does not weaken correctness, security, reliability, or maintainability without an explicit accepted tradeoff
 
 ## Output Format
 

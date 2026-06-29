@@ -1,38 +1,53 @@
-# Review And Architecture Skills
+# Codex Skills
 
-This repository contains four skills as sibling directories:
+This repository mirrors the local Codex skill pack for review, audit, architecture, static-analysis, demand, and spec-driven planning work.
 
-- `diff-review`
-- `repo-audit`
+Primary skills:
+
 - `architecture-standards`
+- `diff-review`
 - `fallow`
+- `notion-demand`
+- `repo-audit`
+- `spec-driven-development`
 
 ## Contents
 
-`diff-review`
-- Reviews local git diffs for bugs, security issues, and code quality before pushing.
-- Includes the skill definition, agent config, stack references, review process references, static-analysis guidance, and `scripts/review-preflight.sh`.
-
-`repo-audit`
-- Runs full repository audits across correctness, security, architecture, performance, and maintainability.
-- Includes the skill definition, agent config, stack references, audit process references, static-analysis guidance, and `scripts/audit-preflight.sh`.
-
 `architecture-standards`
-- Provides architecture guidance for design, refactoring, scaffolding, and architectural code review.
-- Includes the skill definition, agent config, architecture reference packs for current-state diagnosis, target-state design, refactor design, static-analyzer policy, and `scripts/architecture-preflight.sh`.
+- Provides architecture guidance for current-state diagnosis, target-state design, refactoring, scaffolding, architectural review, and static-analyzer policy.
+- Includes architecture reference packs and `scripts/architecture-preflight.sh`.
+
+`diff-review`
+- Reviews local git diffs for bugs, security issues, regressions, external findings, code quality, developer experience, feature gates, and maintainability before pushing.
+- Includes review workflow, gates, finding format, remediation-planning handoff, PR automation guidance, static-analysis guidance, stack references, and `scripts/review-preflight.sh`.
 
 `fallow`
 - Guides free-version Fallow adoption, configuration, reruns, remediation, and interpretation for TypeScript/JavaScript codebase intelligence.
-- Includes the skill definition, agent config, and Fallow workflow, analysis primitive, package internals, and quality benchmark references.
+- Includes Fallow workflow, analysis primitive, package internals, and quality benchmark references.
+
+`notion-demand`
+- Orchestrates Recipe Room demand work in the live Notion Product Roadmap and Tasks databases.
+- Includes lifecycle mode files for Discovery, Design, Delivery, Launch, and Review work.
+
+`repo-audit`
+- Runs full repository audits across correctness, security, architecture-standards alignment, cost efficiency, performance, operability, maintainability, tech debt, and escaped bug patterns.
+- Includes audit workflow, gates, finding format, remediation-planning handoff, architecture-standards inverse audit, cost-efficiency audit, deep audit dual-pass guidance, maintainability rubric, escaped-finding learning, PR audit automation guidance, stack references, and `scripts/audit-preflight.sh`.
+
+`spec-driven-development`
+- Produces codebase-grounded spec packages for features, refactors, migrations, integrations, architecture transitions, and audit remediation.
+- Includes requirement/design/task templates, risk tiering, API/auth/data/event/observability references, spec linting and drift scripts, CI assets, and tests.
 
 ## How They Work Together
 
-- `diff-review` and `repo-audit` are the investigation skills. They focus on finding bugs, risks, regressions, and weak design decisions in real code.
-- `architecture-standards` is the design and boundary guide. It helps shape remediation, evaluate architectural quality, and keep fixes proportionate to the actual problem.
-- `fallow` is the free-version static-analysis signal source for TypeScript/JavaScript repos. It helps surface dead code, duplication, health hotspots, audit gates, and baseline policy without relying on trial, paid, licensed, hosted, pro, or runtime-coverage features.
-- If `architecture-standards` is installed alongside the review skills, it can be used to strengthen investigation quality, architectural reasoning, and fix recommendations.
-- If `fallow` is installed alongside `repo-audit`, Fallow output can be recorded as audit evidence instead of being presented as raw tool output alone.
-- The skills still work independently if companion skills are not installed.
+- `architecture-standards` strengthens both review and audit work by grounding architectural claims in current-state evidence and target-state rules.
+- `diff-review` focuses on branch and working-tree changes before they ship.
+- `diff-review` and `repo-audit` can turn selected live findings into lightweight executor-ready `plans/` handoff files.
+- `fallow` can provide static-analysis evidence for review, audit, and architecture decisions when the target repo uses it.
+- `notion-demand` manages product-demand lifecycle artifacts in Notion.
+- `repo-audit` focuses on the current repository state and broader health risks.
+- `spec-driven-development` turns larger planned changes or remediation work into requirements, design, task, ownership, rollout, and verification artifacts.
+
+The skills work independently, but they are designed to reinforce each other when installed together.
 
 ## Layout
 
@@ -43,42 +58,36 @@ This repository contains four skills as sibling directories:
 │   ├── SKILL.md
 │   ├── agents/openai.yaml
 │   ├── references/
-│   │   ├── architecture-shapes.md
-│   │   ├── current-state-diagnosis.md
-│   │   ├── layer-standards.md
-│   │   ├── target-state-design.md
-│   │   └── ...
-│   └── scripts/
-│       └── architecture-preflight.sh
+│   └── scripts/architecture-preflight.sh
 ├── diff-review/
 │   ├── README.md
 │   ├── SKILL.md
 │   ├── agents/openai.yaml
 │   ├── references/
-│   │   ├── nextjs.md
-│   │   ├── review-workflow.md
-│   │   ├── static-analysis.md
-│   │   └── ...
-│   └── scripts/
-│       └── review-preflight.sh
+│   └── scripts/review-preflight.sh
 ├── fallow/
 │   ├── README.md
 │   ├── SKILL.md
 │   ├── agents/openai.yaml
 │   └── references/
-│       ├── analysis-primitives.md
-│       ├── fallow-workflows.md
-│       └── ...
+├── notion-demand/
+│   ├── README.md
+│   ├── SKILL.md
+│   ├── agents/openai.yaml
+│   └── modes/
 ├── repo-audit/
 │   ├── README.md
 │   ├── SKILL.md
 │   ├── agents/openai.yaml
 │   ├── references/
-│   │   ├── nextjs.md
-│   │   ├── audit-workflow.md
-│   │   ├── static-analysis.md
-│   │   └── ...
-│   └── scripts/
-│       └── audit-preflight.sh
+│   └── scripts/audit-preflight.sh
+├── spec-driven-development/
+│   ├── README.md
+│   ├── SKILL.md
+│   ├── agents/openai.yaml
+│   ├── assets/
+│   ├── references/
+│   ├── scripts/
+│   └── tests/
 └── README.md
 ```

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Notion Demand"
+  short_description: "Orchestrate Recipe Room demand lifecycle work"
+  default_prompt: "Use $notion-demand to create, shape, or progress a Recipe Room demand item."

@@ -32,6 +32,7 @@ Each finding should include:
 - solution options
 - remediation radius
 - prevention artifact
+- linked remediation plan when one exists
 - investigation prompt
 
 ## Root Cause Prompts
@@ -99,3 +100,13 @@ When resolving, include:
 - verification proving root cause is addressed
 - prevention artifact
 - sibling/non-primary/bypass paths checked
+
+## Planning Note
+
+When a finding is converted into a plan, record:
+
+- plan file path
+- dependency order relative to other plans
+- current-tree evidence used for the plan
+- why a lightweight plan is sufficient, or why `spec-driven-development` is needed instead
+- for architecture or cost findings: owner, containment, transition slice, deletion target, prevention artifact, proof, and revisit trigger

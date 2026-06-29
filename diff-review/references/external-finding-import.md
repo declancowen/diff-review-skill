@@ -17,6 +17,7 @@ Use this when the user pastes findings from GitHub, Devin, CI, another reviewer,
    - assign one or more bug classes
    - name the invariant that should have caught it
    - name the variant/sibling path that needs checking
+   - if it escaped a prior clean local review, load `escaped-finding-learning.md` and name the failed review mechanism
 
 3. **Separate action from learning.**
    - live bug: fix or keep open
@@ -39,6 +40,8 @@ Use this when the user pastes findings from GitHub, Devin, CI, another reviewer,
    - one live Compatibility bug means inspect create vs update schemas and old stored data
    - one live Affordance Parity bug means compare button, keyboard, menu, inline, and API paths
    - one live contract-key bug means inspect sibling builders, routes, form handlers, query parameters, storage keys, webhook payloads, and failure/redirect branches that serialize the same public contract
+   - one live invariant-transfer bug means inspect each path created by the same authority move, including direct id hydration, scoped scans, link expansion, stream/subscription authorization, fallback pages, generated artifacts, and route error branches
+   - one live stale-reference bug means inspect retained references, notifications, links, route params, subscriptions, optimistic state, caches, and deleted/tombstoned variants
 
 6. **Handle PR-review state deliberately.**
    - if an automated reviewer has acknowledged a review request with an in-progress reaction/status, wait and poll instead of posting another trigger
@@ -53,4 +56,5 @@ Use this when the user pastes findings from GitHub, Devin, CI, another reviewer,
 - Do not call a finding stale because the diff moved; prove the behavior is gone.
 - Do not mix intentional product changes with bugs. Mark them accepted only with evidence.
 - Do not fix only the pasted line when the bug class implies a sibling path.
+- Do not fix only the concrete review comment after a prior local all-clear. Record why the local review missed it and what acquisition mode or invariant-transfer proof now closes the class.
 - Do not post duplicate `@codex review` or equivalent triggers while a review is already running or acknowledged.

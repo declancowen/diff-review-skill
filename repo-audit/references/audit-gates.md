@@ -29,6 +29,25 @@ For broad remediation, large branches, or presentation-heavy audit scope, also r
 - broad UI/presentation refactors have browser/visual smoke for representative changed screens, or a recorded reason this risk is low and not smokeable
 - large remediation branches have local branch-total evidence and an owner/capability batch ledger; hosted PR diff limits are recorded and compensated for
 
+For full-repo, architecture, health, messy-repo, or remediation audits, also require:
+
+- current-state architecture was reconstructed from code and representative journeys, not inferred only from folders or docs
+- architecture standards were applied in reverse, distinguishing live risk, structural pressure, transition debt, accepted deviations, and evidence gaps
+- material standards gaps have owner, containment/transition shape, prevention artifact, and proof
+- target-state recommendations pass proportionality and simplicity gates
+
+When cost can scale materially, also require:
+
+- material cost paths were traced across normal, idle, peak, failure/recovery, and data-growth behavior, or cost was explicitly scoped out
+- performance, health, caching, or indexing was not treated as proof of cost efficiency
+- material cost findings have amplification evidence, bounds/controls, owner, and before/after proof expectations
+
+When remediation plans are created, also require:
+
+- each plan links to current-tree live audit finding IDs
+- each plan has a planned-at SHA, drift check, in/out-of-scope files, verification gates, STOP conditions, and re-audit requirement
+- broad architecture, migration, platform, or product work is routed to `spec-driven-development` instead of compressed into a thin plan
+
 For Medium+ risk, read `all-clear-antipatterns.md`.
 
 ## Risk Score
@@ -117,6 +136,9 @@ Lower confidence when:
 - duplication budget passing at baseline is treated as debt removal
 - hosted PR diff tooling is truncated/incomplete and no local branch-vs-base audit compensates
 - broad UI/presentation movement has no browser or visual smoke despite layout/navigation/empty-state risk
+- full-repo/health audit lacks architecture-standards inverse evidence or treats an architecture style as the standard
+- material cost exposure exists but only performance or code-shape evidence was checked
+- remediation plan exists but no current-tree audit proof or re-audit closure path is recorded
 
 ## Final Self-Audit
 
@@ -129,3 +151,4 @@ Before "no new findings" or "clean", answer:
 - which sibling subsystem could still carry the same bug?
 - which state variant was least checked?
 - if this caused a major incident tomorrow, where would you investigate first?
+- which missing architecture guarantee or cost-amplification path is most likely to recur because enforcement is absent?

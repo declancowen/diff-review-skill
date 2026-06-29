@@ -1,13 +1,16 @@
-# Fallow
+# Fallow Skill
 
-Guides Fallow adoption, configuration, reruns, remediation, and interpretation for TypeScript/JavaScript codebase intelligence.
+Guides free-version Fallow adoption, configuration, reruns, remediation, and interpretation for TypeScript/JavaScript codebase intelligence.
 
-Use this skill when you want to run or configure the free version of Fallow for dead code, duplication, health and complexity, CI audit gates, baselines, or architecture boundary analysis. It does not use trial, paid, licensed, hosted, pro, or runtime-coverage features.
+## Includes
 
-Works well with `repo-audit` for durable assessment records and with `architecture-standards` when findings or config decisions affect ownership, public APIs, shared packages, duplication abstractions, or module boundaries.
+- `SKILL.md`: operating router for Fallow setup, runs, interpretation, and remediation.
+- `agents/openai.yaml`: agent configuration.
+- `references/`: Fallow workflows, analysis primitives, package internals, and quality benchmarks.
 
-## Folder Contents
+## Use When
 
-- `SKILL.md` contains the full skill instructions and trigger rules.
-- `agents/openai.yaml` defines the agent configuration for the skill.
-- `references/` contains Fallow workflow recipes, analysis primitives, package internals, and quality benchmarks used to interpret analyzer evidence and govern remediation.
+- Setting up or interpreting Fallow in a TypeScript or JavaScript repository.
+- Using dead-code, duplication, complexity, health, boundary, or dependency signals in review and audit work.
+- Separating changed-file gates, production gates, advisory inventories, baselines, and accepted debt.
+- Turning static-analysis evidence into safer review, audit, architecture, or remediation decisions.

@@ -74,6 +74,8 @@ Use this when creating or updating `.audits/{scope}.md`.
 **Finding triage:** {...}
 **Static/analyzer evidence:** {gates, inventories, duplication/refactor themes, policy drift, baselines/suppressions, or not used}
 **Current-state architecture diagnosis:** {structural failure modes or not applicable}
+**Cost exposure:** {material paths checked, scoped out, or not applicable}
+**Remediation plans:** {linked plan files, recommended plans, or not requested}
 **Bug classes / invariants checked:** {...}
 **Repo totality:** {...}
 **Sibling closure:** {...}
@@ -125,4 +127,6 @@ Use this when creating or updating `.audits/{scope}.md`.
 - Clean findings still require proof.
 - Architecture audits must distinguish target-state design from current-state fitness when structural evidence exists.
 - Analyzer-backed audits must separate blocking gates from advisory inventories and transition debt.
+- Cost audits must separate performance health from spend efficiency and record the amplification path or scoped-out rationale.
+- When remediation plans are created, refreshed, blocked, or rejected, the turn records the linked plan files and stable finding IDs. Plans do not replace audit resolution notes.
 - If anything important was not audited, mark partial and name what remains.

@@ -14,8 +14,11 @@ A usable target state defines:
 - public module/API surfaces
 - data ownership and write authority
 - contract ownership
+- cross-layer collaboration semantics
 - async/reliability model
 - integration boundaries
+- rollout, rollback, and recovery model where consequences justify it
+- cost model, amplification controls, and spend evidence where usage or data growth can materially affect cost
 - test and static enforcement
 - operational ownership
 - transition sequence from current state
@@ -78,6 +81,32 @@ For API, CLI, webhook, import/export, generated-client, and storage contracts, d
 - error semantics
 - test fixture
 - migration/legacy behavior
+
+### Cross-Layer Collaboration
+
+For meaningful interactions between capabilities, layers, or systems, define only the semantics needed by the journey:
+
+- command/query/result/event contract and owner
+- required identity, tenant/scope, correlation, deadline/cancellation, and idempotency context
+- model and error translation boundaries
+- transaction, consistency, conflict, ordering, freshness, and partial-result behavior
+- side-effect timing and delivery expectations
+- proportional latency, payload, query/fan-out, concurrency, and cost budgets
+- operational signals that attribute failures and cost to the owning journey
+
+Do not require every boundary to introduce a new interface, DTO, mapper, queue, cache, or repository. Add explicit machinery only where meanings differ, risks justify enforcement, or the existing architecture already uses it coherently.
+
+### Cost Model And Controls
+
+Where cost can grow materially, define:
+
+- useful outcome or value unit used to reason about cost
+- dominant billable dimensions and their owners
+- normal, idle, peak, failure, recovery, and data-growth amplification
+- bounded work, fan-out, retries, retention, and environment controls
+- evidence, budgets/alerts, and revisit triggers
+
+Keep this independent of architecture fashion. The target state should explain why its chosen mechanisms produce an acceptable total cost curve for the workload.
 
 ### Shared Abstraction Rules
 

@@ -1,0 +1,16 @@
+# Spec Summary: Request ID Propagation Across API and Worker Flows
+
+- Scope: `request-id-propagation`
+- Status: `implementation-ready`
+- Risk level: `medium`
+- Owner: `platform-team`
+- Implementation owner: `platform-team`
+- Operations owner: `sre-team`
+- Blocking decisions: `0`
+- Design decisions: `3`
+- Requirements: `5`
+- Implementation tasks: `4`
+- Blocking spikes: `0`
+- Execution status counts: `todo=4`, `in-progress=0`, `completed=0`, `deferred=0`, `blocked=0`
+- Concrete repo path references: `30`
+- Cross-cutting areas marked not applicable: `Migration`

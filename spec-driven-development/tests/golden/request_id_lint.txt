@@ -1,0 +1,5 @@
+Spec lint passed: <ROOT>/references/example-spec/.spec/request-id-propagation
+Design decisions: 3
+Requirements: 5
+Implementation tasks: 4
+Blocking spikes: 0

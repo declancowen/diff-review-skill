@@ -1,0 +1,23 @@
+Spec: public-api-versioning-blocked
+Status: design-ready
+Risk level: high
+Blocking decisions: 1
+Design decisions: 1
+Requirements: 4
+Implementation tasks: 0
+Blocking spikes: 1
+
+DES -> REQ
+- DES-001: REQ-FUNC-001, REQ-NFR-001, REQ-SEC-001, REQ-OPS-001
+
+REQ -> TASK
+- REQ-FUNC-001: UNMAPPED
+- REQ-NFR-001: UNMAPPED
+- REQ-SEC-001: UNMAPPED
+- REQ-OPS-001: UNMAPPED
+
+Uncovered requirements:
+- REQ-FUNC-001
+- REQ-NFR-001
+- REQ-SEC-001
+- REQ-OPS-001

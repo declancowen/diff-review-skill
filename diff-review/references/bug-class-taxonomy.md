@@ -204,6 +204,60 @@ Review proof:
 - check sibling builders/routes/forms/adapters that serialize the same contract
 - add route/API/storage-level tests that assert the serialized key/value shape
 
+### Invariant Transfer
+
+A migration, refactor, decomposition, authority move, or cost optimization preserves the happy path but fails to carry an old or required invariant into the new owner.
+
+Typical signals:
+
+- broad source is replaced by a scoped/narrow source and one visibility, tenancy, fallback, or contract rule disappears
+- backend changes from filtering/returning `null` to throwing, but route semantics are not re-proven
+- old source had derived/generated artifacts or fallback behavior that the new source does not refresh
+- new helper is "scoped" or "narrow" by name, but candidate materialization is not independently guarded
+
+Review proof:
+
+- list the old owner, new owner, and every invariant that must transfer
+- prove the invariant in code at the new owner boundary, not only through projection or UI behavior
+- compare stale, deleted, access-lost, legacy-inconsistent, and failure-branch variants
+- assert serialized route/API contracts when the changed path crosses an API boundary
+
+### Data Admission
+
+Data from a parent, scope, retained reference, event, cache, generated artifact, fallback, or external source is allowed into an output, state transition, side effect, or persistence path without the owning validity/safety rule being applied.
+
+Typical signals:
+
+- related targets are acquired from an already-readable parent and then admitted because the parent references them
+- scope/search/event/batch sources return records whose legacy, permission, lifecycle, or semantic fields are inconsistent with the source
+- notification, bookmark, cache, route param, subscription, optimistic state, or generated target is hydrated after validity changed
+- preview, attachment, reaction, profile, child row, generated metadata, or side effect inherits eligibility from a parent by assumption
+
+Review proof:
+
+- identify the acquisition mode: direct id lookup, scope scan, relation/link expansion, stale reference, fallback page, generated artifact, stream key, cache, optimistic state, or API error branch
+- require each admitted record/state/effect to pass its own authorization, tenancy, existence, lifecycle, and semantic validity rule
+- sweep sibling paths by acquisition mode, not just by nearby filenames
+- add a negative test using an inaccessible, deleted, stale, invalid, unauthorized, or legacy-inconsistent input
+
+### Derived ID Propagation
+
+An admitted or eligible collection is used to derive inputs for a second fetch, join, aggregate, metadata load, counter, preview, side effect, or generated row, but the derived behavior is not constrained to authorized/valid sources or independently admitted at the target owner.
+
+Typical signals:
+
+- source objects are admitted, but related inputs are acquired directly and returned/effected
+- an inaccessible linked target contributes metadata, member ids, counters, summaries, or generated fields
+- related values, attachments, reactions, previews, aggregates, or child rows are queried from a broader id set than the returned parent set
+- tests assert the final parent output but not the derived inputs, effects, or records
+
+Review proof:
+
+- trace derived inputs from the admitted source through every downstream fetch/effect
+- assert derived behavior is based on the eligible source set
+- require materialized/effected targets to pass their own owner rule
+- add a negative test that checks both final outputs and downstream derived inputs/effects
+
 ### Semantic Regression
 
 The code still runs, but product meaning changes unintentionally.

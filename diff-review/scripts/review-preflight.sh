@@ -123,20 +123,35 @@ remote="$(git remote get-url origin 2>/dev/null || echo none)"
 timestamp="$(date +"%Y-%m-%d %H:%M:%S %Z")"
 
 changed_file_tmp="$(mktemp)"
-trap 'rm -f "$changed_file_tmp"' EXIT
+signal_diff_tmp="$(mktemp)"
+trap 'rm -f "$changed_file_tmp" "$signal_diff_tmp"' EXIT
 
 if [ -n "$base_ref" ]; then
   {
     git diff --name-only "$base_ref"...HEAD -- . ':!.reviews/' 2>/dev/null || true
     git diff --name-only -- . ':!.reviews/' 2>/dev/null || true
     git diff --staged --name-only -- . ':!.reviews/' 2>/dev/null || true
+    git ls-files --others --exclude-standard -- . ':!.reviews/' 2>/dev/null || true
   } | sort -u > "$changed_file_tmp"
 else
   {
     git diff --name-only -- . ':!.reviews/' 2>/dev/null || true
     git diff --staged --name-only -- . ':!.reviews/' 2>/dev/null || true
+    git ls-files --others --exclude-standard -- . ':!.reviews/' 2>/dev/null || true
   } | sort -u > "$changed_file_tmp"
 fi
+
+{
+  if [ -n "$base_ref" ]; then
+    git diff "$base_ref"...HEAD -- . ':!.reviews/' 2>/dev/null || true
+  fi
+    git diff -- . ':!.reviews/' 2>/dev/null || true
+    git diff --staged -- . ':!.reviews/' 2>/dev/null || true
+  git ls-files --others --exclude-standard -- . ':!.reviews/' 2>/dev/null | while IFS= read -r file; do
+    [ -f "$file" ] || continue
+    git diff --no-index -- /dev/null "$file" 2>/dev/null || true
+  done
+} > "$signal_diff_tmp"
 
 printf '# Diff Review Preflight\n\n'
 printf -- '- **Captured:** %s\n' "$timestamp"
@@ -194,6 +209,48 @@ else
     printf 'none detected by heuristic\n'
   fi
 fi
+
+section "Deep Review Risk Signals"
+printf 'Files crossing or introduced above 1000 lines:\n\n'
+large_file_found=0
+while IFS= read -r file; do
+  [ -n "$file" ] || continue
+  [ -f "$file" ] || continue
+  new_lines="$(wc -l < "$file" | tr -d ' ')"
+  old_lines=0
+  if [ -n "$base_ref" ] && git cat-file -e "$base_ref:$file" 2>/dev/null; then
+    old_lines="$(git show "$base_ref:$file" 2>/dev/null | wc -l | tr -d ' ')"
+  fi
+  if [ "$new_lines" -ge 1000 ] && [ "$old_lines" -lt 1000 ]; then
+    printf -- '- `%s` — %s lines (was %s)\n' "$file" "$new_lines" "$old_lines"
+    large_file_found=1
+  fi
+done < "$changed_file_tmp"
+if [ "$large_file_found" -eq 0 ]; then
+  printf 'none detected\n'
+fi
+
+print_signal_matches() {
+  local label="$1"
+  local pattern="$2"
+  local matches
+  printf '\n%s:\n\n' "$label"
+  if [ ! -s "$signal_diff_tmp" ]; then
+    printf 'no diff available\n'
+    return 0
+  fi
+  matches="$(grep -Ein "$pattern" "$signal_diff_tmp" | head -80 || true)"
+  if [ -n "$matches" ]; then
+    printf '%s\n' "$matches"
+    return 0
+  fi
+  printf 'none detected\n'
+}
+
+print_signal_matches "Devex/env/config/script signals" '(^diff --git a/.*(package\.json|pnpm-lock|yarn\.lock|bun\.lock|Dockerfile|docker-compose|compose|Makefile|\.env|config|vite|next|turbo|tsconfig|eslint|prettier|biome|lefthook|husky|github/workflows)|^[+-].*(process\.env|import\.meta\.env|dotenv|NEXT_PUBLIC_|VITE_|NODE_ENV|API[_-]?KEY|(^|[^A-Za-z0-9_])PORT([^A-Za-z0-9_]|$)|localhost|127\.0\.0\.1|npm run|pnpm |yarn |bun ))'
+print_signal_matches "Feature-gate/internal-boundary signals" '^[+-].*(feature.?flag|flag|gated|beta|internal|entitlement|rollout|experiment|enabledFor|isEnabled|canAccess|permission|allowlist|whitelist)'
+print_signal_matches "Type/boundary looseness signals" '^\+.*(:[[:space:]]*(any|unknown)| as (const|unknown|any|never|[A-Za-z_])|<.*(any|unknown).*>|@ts-ignore|@ts-expect-error|eslint-disable)'
+print_signal_matches "Branching/condition growth signals" '^\+.*(([^A-Za-z0-9_])(if|switch|case|catch)([^A-Za-z0-9_])|else if|\?.*:|&&|\|\|)'
 
 section "Existing Review Context"
 if ls .reviews/*.md >/dev/null 2>&1; then
@@ -285,6 +342,7 @@ fi
 section "Review Prompts"
 cat <<'EOF'
 - Assign risk score and change archetype tags before reviewing.
+- For Medium+ risk, deep-review requests, devex/feature-gate changes, or structural complexity, run the dual-pass review before synthesis.
 - Classify external findings with `references/bug-class-taxonomy.md`.
 - If static analyzer or architecture-policy signals exist, classify gates, inventories, baselines, suppressions, and transition-state caveats before all-clear.
 - For architecture-remediation diffs, name the current-state failure mode and target-state rule being improved.

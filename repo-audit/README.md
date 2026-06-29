@@ -1,14 +1,18 @@
-# Repo Audit
+# Repo Audit Skill
 
-Audits a repository for correctness, security, architecture, performance, maintainability, and operational risk.
+Audits a repository's current state for correctness, security, architecture-standards alignment, cost efficiency, performance, operability, maintainability, tech debt, and escaped bug patterns.
 
-Use this skill when you want a broader codebase health check instead of a review limited to the current diff.
+## Includes
 
-Works well with `architecture-standards` when you want audit findings and remediation plans grounded in cleaner system boundaries and design tradeoffs.
+- `SKILL.md`: operating router for full or focused repo audits, re-audits, external finding triage, optional remediation planning, and clean-conclusion gates.
+- `agents/openai.yaml`: agent configuration.
+- `scripts/audit-preflight.sh`: collects repo shape, branch/PR context, existing audit/review history, hotspots, risky surfaces, and candidate verification commands.
+- `references/`: audit workflow, gates, finding format, remediation-planning handoff, architecture-standards inverse audit, cost-efficiency audit, deep audit dual-pass guidance, maintainability rubric, escaped-finding learning, PR audit automation, static-analysis guidance, stack references, and calibration material.
 
-## Folder Contents
+## Use When
 
-- `SKILL.md` contains the full skill instructions and trigger rules.
-- `agents/openai.yaml` defines the agent configuration for the skill.
-- `references/` contains stack-specific audit guidance plus calibration, severity, audit-process, external-finding, and static-analysis references used during investigation.
-- `scripts/audit-preflight.sh` collects repo and audit context before a medium/high-risk audit.
+- Auditing a whole repo or high-risk subsystem.
+- Assessing code health, architecture, security, performance, or tech debt.
+- Importing external findings into an audit ledger.
+- Planning prioritized remediation from repo-wide evidence.
+- Turning selected live audit findings into executor-ready remediation plans.

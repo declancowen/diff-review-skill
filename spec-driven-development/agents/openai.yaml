@@ -1,0 +1,7 @@
+interface:
+  display_name: "Spec-Driven Development"
+  short_description: "Create grounded specs and transition plans"
+  default_prompt: "Use $spec-driven-development with $architecture-standards and, when available, $diff-review to create or update a codebase-grounded spec package under `.spec/<scope>/`, including slice review loops, audit/static-analysis evidence, and architecture-transition planning when relevant."
+
+policy:
+  allow_implicit_invocation: true

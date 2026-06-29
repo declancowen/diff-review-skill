@@ -13,7 +13,10 @@ Use this to choose mandatory checks for a turn. Assign one or more tags at the t
 - `release-safety`
 - `infra`
 - `security`
+- `devex`
+- `feature-gate`
 - `performance`
+- `maintainability`
 
 On Turn 2+, tags are based on current branch state plus current-turn delta.
 
@@ -93,6 +96,35 @@ For High/Critical risk, review:
 - migration/backfill ordering
 - observability and operator recovery
 
+## Developer Experience
+
+When local setup, environment, package scripts, ports, generated files, credentials, or config loading changes, check:
+
+- renamed, moved, added, or newly required env vars
+- secrets read from a different source or at a different lifecycle point
+- scripts, package-manager commands, task runners, and generated artifacts
+- ports, host binding, networking, local proxy, callbacks, and tunnel assumptions
+- manual setup steps that did not previously exist
+- CI vs local command drift
+- docs or examples that still teach the old workflow
+- fallback behavior when optional local config is absent
+
+Treat broken local build/run/test flows as review findings when the diff changes the workflow developers rely on.
+
+## Feature Gate / Internal Boundary
+
+When a flag, entitlement, rollout check, internal-only route, beta surface, or conditional exposure changes, check:
+
+- default flag values and missing-flag behavior
+- server-side enforcement, not only UI hiding
+- read, write, import/export, deep-link, and API bypass paths
+- cached or preloaded data that may expose hidden capability
+- old clients, disabled tenants, and non-member scopes
+- analytics, notifications, search, webhooks, or background jobs that may leak the feature
+- cleanup changes that remove a gate before all consumers are ready
+
+Do not assume a feature remains gated because the primary UI path is hidden.
+
 ## Security
 
 Check:
@@ -114,3 +146,16 @@ Check:
 - cache invalidation and key scope
 - repeated serialization/deep comparisons
 - bounded concurrency
+
+## Maintainability / Structure
+
+When a diff adds non-trivial implementation complexity, load `maintainability-rubric.md` and check:
+
+- whether behavior can be preserved with fewer concepts, branches, helpers, or modes
+- large file growth and decomposition opportunities
+- ad hoc conditionals in already busy flows
+- unclear ownership across modules, packages, services, or components
+- feature-specific logic leaking into shared paths
+- duplicated helpers or missed canonical utilities
+- wrappers, casts, optionality, or loose types that obscure invariants
+- non-atomic or overly sequential orchestration that makes state harder to reason about

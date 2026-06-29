@@ -1,0 +1,11 @@
+{
+  "email-normalization-migration/design.md": "7b0b79250aee9b6b2c77b12e9350a9ae646edb1e4a8b6e53c724d61fa5fc2b6b",
+  "email-normalization-migration/requirements.md": "b8ad470ac1805dbdf22ab94f4c942e64521fbae29c50aadd4823b4646ad5ec6a",
+  "email-normalization-migration/tasks.md": "a2cb37bd80b0b27a9640c83d4e4c6d8dbe2ac7018eaf6705330630cec0da0203",
+  "public-api-versioning-blocked/design.md": "d1911114be1e654d40749cc50fdf2ac5f76431a1d88c0f06d6e61de8cbd91be4",
+  "public-api-versioning-blocked/requirements.md": "661e8aaf5033c5dfd54abadf7c53862170f617f4ee9936e4b809bd619cdaa27b",
+  "public-api-versioning-blocked/tasks.md": "162c7e975c24e5e941b75dbad4999ff1debc6b88d5f5ec27252966d50ed1ca50",
+  "request-id-propagation/design.md": "a20b6cbe31d34691dc2394f5ef3967eb3bc3110a5cbf4dc4dff029316437c57b",
+  "request-id-propagation/requirements.md": "44610cd5ad1680c208a7c80b7511cc28e5a2832fc3826cf3540cd31a0274b2ab",
+  "request-id-propagation/tasks.md": "233184c3f3541df9ce5cc3f465a2b3f690ad71324b6e1aae6b488b7728699f6d"
+}

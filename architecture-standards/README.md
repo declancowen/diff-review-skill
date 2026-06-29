@@ -1,14 +1,17 @@
-# Architecture Standards
+# Architecture Standards Skill
 
-Guides architecture decisions, refactors, scaffolding, and architectural code review with practical standards across layers and cross-cutting concerns.
+Provides architecture guidance for current-state diagnosis, target-state design, refactoring, scaffolding, architectural review, and static-analyzer policy.
 
-Use this skill when you need help shaping module boundaries, choosing patterns proportionately, or reviewing architectural quality.
+## Includes
 
-This skill complements `diff-review` and `repo-audit` by improving design reasoning, remediation quality, and boundary discipline.
+- `SKILL.md`: operating router for architecture diagnosis, design, review, and build support.
+- `agents/openai.yaml`: agent configuration.
+- `scripts/architecture-preflight.sh`: collects repository shape, architecture signals, hotspots, and candidate verification context.
+- `references/`: architecture shapes, layer standards, decision frameworks, enforcement patterns, cost-efficient architecture, design gates, review checklists, and implementation recipes.
 
-## Folder Contents
+## Use When
 
-- `SKILL.md` contains the full skill instructions and usage guidance.
-- `agents/openai.yaml` defines the agent configuration for the skill.
-- `references/` contains architecture standards, current-state diagnosis, target-state design, refactor design, static-analyzer policy, review checklists, scorecards, and implementation guidance used during design and review work.
-- `scripts/architecture-preflight.sh` collects architecture context before deeper design or review work.
+- Designing or reviewing architecture for a feature, refactor, migration, platform change, or remediation.
+- Diagnosing messy current-state architecture and deriving a proportionate target state.
+- Checking ownership boundaries, data flow, contracts, cross-cutting concerns, simplicity, or enforcement.
+- Strengthening repo-audit, diff-review, spec-driven-development, and static-analysis decisions.

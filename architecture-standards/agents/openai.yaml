@@ -1,7 +1,7 @@
 interface:
   display_name: "Architecture Standards"
-  short_description: "Design target state and diagnose architecture debt"
-  default_prompt: "Use $architecture-standards to diagnose current-state architecture, design an enforceable target state, and guide code with clear ownership and boundaries."
+  short_description: "Design and enforce proportionate architecture"
+  default_prompt: "Use $architecture-standards to design or implement this change with clear ownership, proportionate boundaries, explicit contracts, and enforceable fitness functions."
 
 policy:
   allow_implicit_invocation: true
