@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Consultant"
+  short_description: "Run demand lifecycle work in local Markdown"
+  default_prompt: "Use $ai-consultant to shape, design, deliver, QA, and review a demand in local Markdown artefacts."
